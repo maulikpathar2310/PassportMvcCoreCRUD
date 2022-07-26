@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Select";
+}
+
+<h3>Choose the Option</h3>
+<hr />
+
+<form asp-action="Select" asp-controller="Home" method="post" id="myForm" name="form" enctype="multipart/form-data">
+    <div style="background-color:darkcyan;color:aliceblue;padding:10px;">
+        <h5 style="color:red">@ViewBag.error</h5>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="opt" id="create" value="1">
+            <label class="form-check-label" for="create">
+                New Passport Application form
+            </label>
+        </div>
+        
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="opt" id="edit" value="2">
+            <label class="form-check-label" for="edit">
+                Edit Passport Application form
+            </label>
+        </div>
+
+         <div class="form-check">
+            <input class="form-check-input" type="radio" name="opt" id="details" value="3">
+            <label class="form-check-label" for="details">
+                Display Passport Application form
+            </label>
+        </div>
+
+        <div class="form-group" id="block" style="margin-top:25px; margin-bottom:20px;">
+            <label class="control-label col-md-2">Enter File Number</label>
+            <div class="col-md-10">
+                <input class="form-control" name="file_num" id="file_num" />
+                <h5 style="color:red" id="error"></h5>
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            <input type="submit" value="Select" class="btn btn-default" />
+        </div>
+    </div>
+
+</form>
+
+ <script src="~/js/PassportScript.js"></script>
+ <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#block").css('display', 'none');
+        $('input[type=radio][name=opt]').change(function() {
+            if (this.value == '1') {
+                $('#block').css('display', 'none');
+            }
+            else if (this.value == '2') {
+                $('#block').css('display', 'block');
+            }
+            else if (this.value == '3') {
+                $('#block').css('display', 'block');
+            }
+        });
+        $("#myForm").on('submit', function() {
+            var radiovalue = $("input[name='opt']:checked").val();
+
+            if (radiovalue == 2 && $("#file_num").val() == "") {
+                $("error").html("please enter file number");
+                $("#file_num").focus();
+                return false
+            }
+            else {
+                return true;
+            }
+        })
+    })
+</script>
+  

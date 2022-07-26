@@ -1,0 +1,1500 @@
+﻿@model PassportMvcCoreCRUD.Models.CustomList;
+@{
+    Layout = null;
+}
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Passport</title>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body onload="setDate()">
+    <div>
+        <div class="container mb-4">
+           <form asp-action="Edit"   method="post" asp-controller="Home" enctype="multipart/form-data" id="myForm" name="form">
+           @* @using (Html.BeginForm("Create", "Home", FormMethod.Post, new { @id = "myForm", name = "form", @enctype = "multipart/form-data" }))
+            {*@
+                @Html.AntiForgeryToken()
+
+                @*<form name="form" method="POST" id="form" action="submitted.html" onsubmit="return validateForm()">*@
+                @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+                <!-- file -->
+
+                <div class="my-4 me-4" style="float: right;">
+                    <label for="file_num" class="form-label h6 mx-3"> File Number (For office use only) </label>
+                    <div>
+                        <input type="hidden" class="form-control capital mx-3" name="Pass1.file_num" asp-for="Pass1.file_num" placeholder="Enter file number">
+                        @*@Html.EditorFor(model => model.file_num, new { htmlAttributes = new { @class = "form-control capital mx-3" } })*@
+                        @*@Html.ValidationMessageFor(model => model.file_num, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+
+                
+                <div class="head m-4" style="clear: right;">
+                    <h4 style="text-align:center">GOVERNMENT OF INDIA,MINISTRY OF EXTERNAL AFFAIRS</h4>
+                    <h4 style="text-align:center">PASSPORT APPLICATION FORM</h4>
+                </div>
+                <h5 class="mx-4 px-4 mt-2" style="text-align:justify;">
+                    Please read the Passport Instruction Booklet carefully before filling the form. Fill this form in CAPITAL LETTERS using blue/ black ink ball point pen only. Furnishing of incorrect information/ suppression of information would lead to rejection
+                    of the application and would attract penal provisions as prescribed under the Passports Act, 1967. Please produce your original documents at the time of submission of the form.
+                </h5><br>
+                <!-- section 1 -->
+                <div class="card my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">1. Service Required</h5>
+                        <div class="row">
+                            <div class="col-md-9 col-sm-12">
+                                <!-- 1.1 -->
+                                <div class="row mx-2 my-3">
+                                    <div class="col-lg-3 col-md-4">
+                                        <span class="h6">1.1 Appying For</span>
+                                    </div>
+                                    <div class="col-lg-7 col-md-8">
+                                        <input class="form-check-input" type="radio" asp-for="Pass1.applying" id="applying1" value="1" onclick="Reason()">
+                                        <label class="form-check-label" for="applying1">
+                                            Fresh Application
+                                        </label>
+                                        <input class="form-check-input" type="radio" asp-for="Pass1.applying" id="applying2" value="2" onclick="Reason()">
+                                        <label class="form-check-label" for="applying2">
+                                            Re-issue form
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- 1.2 -->
+                                <div class="mx-2 my-3">
+                                    <span class="h6 mx-2">1.2 If re-issue, specify reason</span>
+                                    <div class="row px-2 py-2">
+                                        <div class="col-sm-12 col-md-12 col-lg-8">
+                                            <input class="form-check-input" type="radio" asp-for="Pass1.re_reason" id="re_reason1" value="1" onclick="Reason()" disabled>
+                                            <label class="form-check-label" for="re_reason1">
+                                                Validity Expired within 3 years/Due to Expire
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="radio" asp-for="Pass1.re_reason" id="re_reason2" value="2" onclick="Reason()" disabled>
+                                            <label class="form-check-label" for="re_reason2">
+                                                Validity Expired more than 3 year ago
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="radio" asp-for="Pass1.re_reason" id="re_reason3" value="3" onclick="Reason()" disabled>
+                                            <label class="form-check-label" for="re_reason3">
+                                                Change in Existing Personal Particulars
+
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-4">
+                                            <input class="form-check-input" type="radio" asp-for="Pass1.re_reason" id="re_reason4" value="4" onclick="Reason()" disabled>
+                                            <label class="form-check-label" for="re_reason4">
+                                                Exhaustion of Pages
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="radio" asp-for="Pass1.re_reason" id="re_reason5" value="5" onclick="Reason()" disabled>
+                                            <label class="form-check-label" for="re_reason5">
+                                                Lost Passport
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="radio" asp-for="Pass1.re_reason" id="re_reason6" value="6" onclick="Reason()" disabled>
+                                            <label class="form-check-label" for="re_reason6">
+                                                Damaged Passport
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 1.3 -->
+                                <div class="mx-2 my-3">
+                                    <span class="h6 mx-2">
+                                        1.3 If change in existing personal particulars,specify
+                                        reason(s)
+                                    </span>
+                                    <div class="row px-3 py-2">
+                                        <div class="col-lg-4 col-sm-12">
+                                            <input class="form-check-input" type="checkbox" asp-for="Pass1.ex_reason" id="ex_reason1" value="1" disabled>
+                                            <label class="form-check-label" for="ex_reason1">
+                                                Appearance
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="checkbox" asp-for="Pass1.ex_reason" id="ex_reason2" value="2" disabled>
+                                            <label class="form-check-label" for="ex_reason2">
+                                                Signature
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="checkbox" asp-for="Pass1.ex_reason" id="ex_reason3" value="3" disabled>
+                                            <label class="form-check-label" for="ex_reason3">
+                                                Given Name
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-4 col-sm-12">
+                                            <input class="form-check-input" type="checkbox" asp-for="Pass1.ex_reason" id="ex_reason4" value="4" disabled>
+                                            <label class="form-check-label" for="ex_reason4">
+                                                Surname
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="checkbox" asp-for="Pass1.ex_reason" id="ex_reason5" value="5" disabled>
+                                            <label class="form-check-label" for="ex_reason5">
+                                                Date of birth
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="checkbox" asp-for="Pass1.ex_reason" id="ex_reason6" value="6" disabled>
+                                            <label class="form-check-label" for="ex_reason6">
+                                                Spouse Name
+
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-4 col-sm-12">
+                                            <input class="form-check-input" type="checkbox" asp-for="Pass1.ex_reason" id="ex_reason7" value="7" disabled>
+                                            <label class="form-check-label" for="ex_reason7">
+                                                Address
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="checkbox" asp-for="Pass1.ex_reason" id="ex_reason8" value="8" disabled>
+                                            <label class="form-check-label" for="ex_reason8">
+                                                Delete ECR
+                                            </label>
+                                            <br>
+                                            <input class="form-check-input" type="checkbox" asp-for="Pass1.ex_reason" id="ex_reason9" value="9" onclick="other()">
+                                            <label class="form-check-label" for="ex_reason9">
+                                                Others,Specify
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-10 col-12  py-2 px-3">
+                                        <input class="form-control mb-2" type="text" name="Pass1.other_reason1" id="other_reason1" placeholder="other reason" disabled>
+                                        <input class="form-control" type="text" asp-for="Pass1.other_reason1" id="other_reason2" placeholder="other reason" disabled>
+                                    </div>
+                                </div>
+
+                                <!-- 1.4 -->
+                                <div class="row mx-2 my-3">
+                                    <div class="col-lg-5 col-md-6 col-sm-6 col-12 p-1">
+                                        <span class="h6 mx-2">1.4 Type of Application</span>
+                                    </div>
+                                    <div class="col-lg-7 col-md-6 col-sm-6 col-12 p-1">
+                                        <input class="form-check-input" type="radio" asp-for="Pass1.app_type" id="app_type1" value="1">
+                                        <label class="form-check-label" for="app_type1">
+                                            Normal
+                                        </label>
+                                        <input class="form-check-input" type="radio" asp-for="Pass1.app_type" id="app_type2" value="2">
+                                        <label class="form-check-label" for="app_type2">
+                                            Tatkaal
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- 1.5 -->
+                                <div class="row mx-2 my-3">
+                                    <div class="col-lg-5 col-md-7 col-sm-7 col-12 p-1">
+                                        <span class="h6 mx-2">1.5 Type of Passport Booklet</span>
+                                    </div>
+                                    <div class="col-lg-7 col-md-5 col-sm-5 col-12 p-1">
+                                        <input class="form-check-input" type="radio" asp-for="Pass1.booklet_type" id="booklet_type1" value="1">
+                                        <label class="form-check-label" for="booklet_type1">
+                                            36 pages
+                                        </label>
+                                        <input class="form-check-input" type="radio" asp-for="Pass1.booklet_type" id="booklet_type2" value="2">
+                                        <label class="form-check-label" for="booklet_type2">
+                                            60 pages
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- 1.6 -->
+                                <div class="row mx-2 my-3">
+                                    <div class="col-lg-5 col-md-6 col-sm-6 col-12 p-1">
+                                        <span class="h6 mx-2">1.6 Validity Required</span>
+                                    </div>
+                                    <div class="col-lg-7 col-md-6 col-sm-6 col-12 p-1">
+                                        <input class="form-check-input" type="radio" asp-for="Pass1.validity" id="validity1" value="1">
+                                        <label class="form-check-label" for="validity1">
+                                            10 Years
+                                        </label>
+                                        <input class="form-check-input" type="radio" asp-for="Pass1.validity" id="validity2" value="2">
+                                        <label class="form-check-label" for="validity2">
+                                            Up to age 18
+                                        </label>
+
+                                    </div>
+                                    <small>(For minors between 15 and 18 years)</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="file m-2 p-2">
+                                    <div class="mb-3">
+                                        <label for="uploadphoto" asp-for="Pass1.photoDeatils" class="form-label">Select Passport Size Photo</label>
+                                        <input   id="uploadphoto" asp-for="Pass1.photoDeatils" accept="images/*">
+                                        <img src="/images/@Model.Pass1.photo" width="50" height="50" asp-append-version="true"/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="uploadSign"  asp-for="Pass1.SignDeatils" class="form-label">Select your Sign</label>
+                                        <input  id="uploadSign" asp-for="Pass1.SignDeatils" accept="images/*">
+                                         <img src="/images/@Model.Pass1.Sign" width="50" height="50" asp-append-version="true"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- section 2 -->
+                <div class="card  my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">2. Applicant details</h5>
+
+                        <!-- 2.1 -->
+                        <span class="h6 mx-4">2.1 Applicant's Given Name</span> (Given Name means First name followed by Middle name (If any))(Initials not allowed)
+
+                        <div class="row mx-3 my-3">
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control capital" id="name" asp-for="Pass2.name" placeholder=" name">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="middle_name" class="form-label">Middle Name</label>
+                                    <input type="text" class="form-control capital" id="middle_name" asp-for="Pass2.middle_name" placeholder="middle name">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">SurName</label>
+                                    <input type="text" class="form-control capital" id="surname" asp-for="Pass2.surname" placeholder="surname">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2.2 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-5 col-md-8 col-sm-9 col-12 p-1">
+                                <span class="h6 mx-2">2.2 Are you known by any other names (aliases)?</span>
+                            </div>
+                            <div class="col-lg-6 col-md-4 col-sm-3 col-12 p-1">
+                                <input class="form-check-input" type="radio"asp-for="Pass2.other_name" id="other_name1" value="1">
+                                <label class="form-check-label" for="other_name1">
+                                    Yes
+                                </label>
+                                <input class="form-check-input" type="radio"asp-for="Pass2.other_name" id="other_name2" value="2">
+                                <label class="form-check-label" for="other_name2">
+                                    No
+                                </label>
+
+                            </div>
+                        </div>
+
+                        <!-- 2.3 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-5 col-md-8 col-sm-9 col-12 p-1">
+                                <span class="h6 mx-2">2.3 Have you ever changes your name?</span>
+                            </div>
+                            <div class="col-lg-6 col-md-4 col-sm-3 col-12 p-1">
+                                <input class="form-check-input" type="radio" asp-for="Pass2.changes_name" id="changes_name1" value="1">
+                                <label class="form-check-label" for="changes_name1">
+                                    Yes
+                                </label>
+                                <input class="form-check-input" type="radio" asp-for="Pass2.changes_name" id="changes_name2" value="2">
+                                <label class="form-check-label" for="changes_name2">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 2.4 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-4 col-md-6  col-sm-8 col-12">
+                                <label for="birth_date" class="form-label h6">2.4 Date of Birth (DD-MM-YYYY)</label>
+                            </div>
+                            <div class="col-lg-3 col-md-6  col-sm-4 col-12">
+                                <input type="date" class="form-control" id="birth_date" asp-for="Pass2.birth_date">
+                            </div>
+                        </div>
+
+                        <!-- 2.5 -->
+
+                        <div class="mx-2 my-3">
+                            <span class="h6 px-1 mx-2">2.5 Birth Place Details</span>
+
+                            <div class="row mx-3 mt-2">
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <div class="mb-3">
+                                        <label for="birth_place" class="form-label"> Place of Birth </label>
+                                        <input type="text" class="form-control capital" id="birth_place" asp-for="Pass2.birth_place" placeholder="Enter birth place">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <div class="mb-3">
+                                        <label for="birth_district" class="form-label"> District </label>
+                                        <input type="text" class="form-control capital" asp-for="Pass2.birth_district" id="birth_district" placeholder="Enter birth District">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <div class="mb-3">
+                                        <label for="birth_state" class="form-label"> State/UT </label>
+                                        <input type="text" class="form-control capital" id="birth_state" asp-for="Pass2.birth_state" placeholder="Enter birth state">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- India or not -->
+                            <div class="row mx-3">
+                                <div class="col-lg-6 col-md-8 col-sm-12 col-12">
+                                    <label for="country" class="form-label"> Region/Country (If born abroad) </label>
+                                    <input type="text" class="form-control capital" asp-for="Pass2.country" id="country" placeholder="Enter birth region/country" disabled>
+                                </div>
+                                <div class="mt-4 col-lg-6 col-md-12 col-sm-12 col-12 ">
+                                    <span class="pe-4">Your Country?</span>
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.country_select" id="country_select1" value="1" onclick="chooseCountry()">
+                                    <label class="form-check-label" for="country_select1">
+                                        India
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.country_select" id="country_select2" value="2" onclick="chooseCountry()">
+                                    <label class="form-check-label" for="country_select2">
+                                        Outside of India
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- 2.6 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-3 col-md-3 col-sm-12 col-12 p-1">
+                                <span class="h6 mx-2">2.6 Gender</span>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-12 col-12 p-1">
+                                <input class="form-check-input" type="radio" asp-for="Pass2.gender" id="gender1" value="1">
+                                <label class="form-check-label" for="gender1">
+                                    Male
+                                </label>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-12 col-12 p-1">
+                                <input class="form-check-input" type="radio" asp-for="Pass2.gender" id="gender2" value="2">
+                                <label class="form-check-label" for="gender2">
+                                    Female
+                                </label>
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-sm-12 col-12 p-1">
+                                <input class="form-check-input" type="radio" asp-for="Pass2.gender" id="gender3" value="3">
+                                <label class="form-check-label" for="gender3">
+                                    Transgender
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 2.7 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-3 col-md-3 col-sm-4 col-12 p-1">
+                                <span class="h6 mx-2">2.7 Marital Status</span>
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-8 col-12 p-1">
+                                <input class="form-check-input" type="radio" asp-for="Pass2.marital_status" id="marital_status1" value="1">
+                                <label class="form-check-label" for="marital_status1">
+                                    Single
+                                </label> &nbsp;
+                                <input class="form-check-input" type="radio" asp-for="Pass2.marital_status" id="marital_status2" value="2">
+                                <label class="form-check-label" for="marital_status2">
+                                    Married
+                                </label> &nbsp;
+                                <input class="form-check-input" type="radio" asp-for="Pass2.marital_status" id="marital_status3" value="3">
+                                <label class="form-check-label" for="marital_status3">
+                                    Divorced
+                                </label> &nbsp;
+                                <input class="form-check-input" type="radio" asp-for="Pass2.marital_status" id="marital_status4" value="4">
+                                <label class="form-check-label" for="marital_status4">
+                                    Widow/Widower
+                                </label> &nbsp;
+                                <input class="form-check-input" type="radio" asp-for="Pass2.marital_status" id="marital_status5" value="5">
+                                <label class="form-check-label" for="marital_status5">
+                                    Separated
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 2.8 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-12 p-1">
+                                <span class="h6 mx-2">2.8 Citizenship of India by </span>
+                            </div>
+                            <div class="col-lg-9 col-md-6 col-sm-9 col-12 p-1">
+                                <input class="form-check-input" type="radio"asp-for="Pass2.citizenship" id="citizenship1" value="1">
+                                <label class="form-check-label" for="citizenship1">
+                                    Birth
+                                </label> &nbsp;
+                                <input class="form-check-input" type="radio" asp-for="Pass2.citizenship" id="citizenship2" value="2">
+                                <label class="form-check-label" for="citizenship2">
+                                    Decent
+                                </label> &nbsp;
+                                <input class="form-check-input" type="radio" asp-for="Pass2.citizenship" id="citizenship3" value="3">
+                                <label class="form-check-label" for="citizenship3">
+                                    Registration/Naturalization
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 2.9------------2.10 -->
+                        <div class="row mx-2 my-3">
+                            <!-- PAN -->
+                            <div class="col-md-6 pe-5">
+                                <label for="pan_id" class="form-label h6"> 2.9 PAN(If available) </label>
+                                <input type="text" class="form-control capital mx-3" asp-for="Pass2.pan_id" id="pan_id" placeholder="Enter PAN">
+                            </div>
+                            <!-- country -->
+                            <div class="col-md-6 pe-5">
+                                <label for="voter_id" class="form-label h6 mx-2"> 2.10 Voter ID(If available) </label>
+                                <input type="text" class="form-control capital mx-3" asp-for="Pass2.voter_id" id="voter_id" placeholder="Enter Voter Id number">
+                            </div>
+                        </div>
+
+                        <!-- 2.11 -->
+                        <div class="mx-2 my-3">
+                            <span class="h6 mx-2">2.11 Employment Type</span>
+                            <div class="row px-3 ">
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio"asp-for="Pass2.emp_type" onclick="emp_org()" value="1" id="emp_type1">
+                                    <label class="form-check-label" for="emp_type1">
+                                        PSU
+                                    </label>
+                                </div>
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio"asp-for="Pass2.emp_type" onclick="emp_org()" value="2" id="emp_type2">
+                                    <label class="form-check-label" for="emp_type2">
+                                        Government
+                                    </label>
+                                </div>
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.emp_type" onclick="emp_org()" value="3" id="emp_type1">
+                                    <label class="form-check-label" for="emp_type3">
+                                        Statutory Body
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row px-3 ">
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.emp_type" onclick="emp_org()" value="4" id="emp_type4">
+                                    <label class="form-check-label" for="emp_type4">
+                                        Retired Government Servant
+                                    </label>
+                                </div>
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.emp_type" onclick="emp_org()" value="5" id="emp_type5">
+                                    <label class="form-check-label" for="emp_type5">
+                                        Self Employment
+                                    </label>
+                                </div>
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio"asp-for="Pass2.emp_type" onclick="emp_org()" value="6" id="emp_type6">
+                                    <label class="form-check-label" for="emp_type6">
+                                        Private
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row px-3 ">
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio"asp-for="Pass2.emp_type" onclick="emp_org()" value="7" id="emp_type7">
+                                    <label class="form-check-label" for="emp_type7">
+                                        Homemaker
+                                    </label>
+                                </div>
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.emp_type" onclick="emp_org()" value="8" id="emp_type8">
+                                    <label class="form-check-label" for="emp_type8">
+                                        Not Employed
+                                    </label>
+                                </div>
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.emp_type" onclick="emp_org()" value="9" id="emp_type9">
+                                    <label class="form-check-label" for="emp_type9">
+                                        Retired-Private Service
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row px-3 ">
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.emp_type" onclick="emp_org()" value="10" id="emp_type10">
+                                    <label class="form-check-label" for="emp_type10">
+                                        Student
+                                    </label>
+                                </div>
+                                <div class="col-md-12 col-lg-4">
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.emp_type" onclick="emp_org()" value="11" id="emp_type11">
+                                    <label class="form-check-label" for="emp_type11">
+                                        Others
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row ps-3">
+
+                                <div class="col-md-12">
+                                    <input class="form-check-input" type="radio" asp-for="Pass2.emp_type" onclick="emp_org()" value="12" id="emp_type12">
+                                    <label class="form-check-label" for="emp_type12">
+                                        Owners,Partners & Directors of companies which are members of CII, FICCI & ASSOCHAM
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2.12 -->
+                        <div class="my-2 mx-2">
+                            <label for="emp_org_name" class="form-label h6 mx-3">
+                                2.12 If employed in PSU/ Government/
+                                Statutory
+                                Body, specify organization name
+                            </label>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-8">
+                                    <input type="text" class="form-control capital mx-3" asp-for="Pass2.emp_org_name" id="emp_org_name" placeholder="Enter organization name" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2.13 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-7 col-md-10 col-sm-12 col-12 p-1">
+                                <label for="gov_servent" class="form-label h6 mx-2">
+                                    2.13 Is either of your parent (in case
+                                    of minor)/ spouse, a government servant?
+                                </label>
+                            </div>
+                            <div class="col-lg-5 col-md-2 col-sm-12 col-12 p-1">
+                                <input class="form-check-input" type="radio" asp-for="Pass2.gov_servant" id="gov_servant1" value="1">
+                                <label class="form-check-label" for="gov_servant1">
+                                    Yes
+                                </label>
+                                <input class="form-check-input" type="radio" asp-for="Pass2.gov_servant" id="gov_servant2" value="2">
+                                <label class="form-check-label" for="gov_servant2">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 2.14 -->
+                        <div class="row mx-2 my-3">
+                            <label for="edu_qualification" class="form-label h6">2.14 Educational Qualification</label>
+                            <div class="row">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-6">
+                                        <input class="form-check-input" type="radio" asp-for="Pass2.edu_qualification" id="edu_qualification1" value="1">
+                                        <label class="form-check-label" for="edu_qualification1">
+                                            7th pass or less
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <input class="form-check-input" type="radio" asp-for="Pass2.edu_qualification" id="edu_qualification2" value="2">
+                                        <label class="form-check-label" for="edu_qualification2">
+                                            B/w 8th & 9th Std
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <input class="form-check-input" type="radio"asp-for="Pass2.edu_qualification" id="edu_qualification3" value="3">
+                                        <label class="form-check-label" for="edu_qualification3">
+                                            10th pass or above
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <input class="form-check-input" type="radio" asp-for="Pass2.edu_qualification" id="edu_qualification4" value="4">
+                                        <label class="form-check-label" for="edu_qualification4">
+                                            Graduate & above
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- 2.15 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-5 col-md-10 col-sm-9 col-12 p-1">
+                                <label for="non_ecr" class="form-label h6 mx-2">
+                                    2.15 Are you eligible for Non-ECR category?
+                                </label>
+                            </div>
+                            <div class="col-lg-5 col-md-2 col-sm-3 col-12 p-1">
+                                <input class="form-check-input" type="radio" asp-for="Pass2.non_ecr" id="non_ecr1" value="1">
+                                <label class="form-check-label" for="non_ecr1">
+                                    Yes
+                                </label>
+                                <input class="form-check-input" type="radio"asp-for="Pass2.non_ecr" id="non_ecr2" value="2">
+                                <label class="form-check-label" for="non_ecr2">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 2.16 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-4 col-md-6 col-sm-8">
+
+                                <label for="mark" class="form-label h6">2.16 Visible Distinguishing Mark</label>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-4">
+                                <select class="form-select" aria-label="Mark" asp-for="Pass2.mark_select" id="mark_select">
+                                    <option value="">-----</option>
+                                    <option value="1">Face</option>
+                                    <option value="2">Hand</option>
+                                    <option value="3">leg</option>
+                                    <option value="4">Ear</option>
+                                    <option value="5">Nail</option>
+                                    <option value="6">Fingers</option>
+                                    <option value="7">Chin</option>
+                                    <option value="8">Foot</option>
+                                    <option value="9">Ankle</option>
+                                    <option value="10">Elbo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 2.17 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-4 col-md-6  col-sm-6 col-12">
+                                <label for="aadhar" class="form-label h6">2.17 Aadhar Number</label>
+                            </div>
+                            <div class="col-lg-3 col-md-6  col-sm-6 col-12">
+                                <input type="text" class="form-control" id="aadhar" asp-for="Pass2.aadhar">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- section 3 -->
+                <div class="card  my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">3. Family Details</h5>
+
+                        <!-- 3.1 -->
+                        <label for="father" class="form-label h6 ms-4">
+                            3.1 Father's Given Name(Given Name means First name followed by Middle name (If any))(Initials
+                            not allowed)
+                        </label>
+
+                        <div class="row mx-3 my-3">
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="father_name" class="form-label">Father Name</label>
+                                    <input type="text" class="form-control capital" id="father_name" asp-for="Pass3.father_name" placeholder="Father  name">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="father_middle_name" class="form-label">Father Middle Name</label>
+                                    <input type="text" class="form-control capital" id="father_middle_name" asp-for="Pass3.father_middle_name" placeholder="Father middle name (If any)">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="father_surname" class="form-label">Father Surname</label>
+                                    <input type="text" class="form-control capital" id="father_surname" asp-for="Pass3.father_surname" placeholder="Father surname">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3.2 -->
+                        <label for="mother" class="form-label h6 ms-4">
+                            3.2 Mother's Given Name(Given Name means First name followed by Middle name (If any))(Initials
+                            not allowed)
+                        </label>
+
+                        <div class="row mx-3 my-3">
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="mother_name" class="form-label">Mother Name</label>
+                                    <input type="text" class="form-control capital" id="mother_name" asp-for="Pass3.mother_name" placeholder="Mother name">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="mother_middle_name" class="form-label">Mother Middle Name</label>
+                                    <input type="text" class="form-control capital" id="mother_middle_name" asp-for="Pass3.mother_middle_name" placeholder="Mother middle name (If any)">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="mother_surname" class="form-label">Mother Surname</label>
+                                    <input type="text" class="form-control capital" id="mother_surname" asp-for="Pass3.mother_surname" placeholder="Mother surname">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3.3 -->
+                        <label for="guardian" class="form-label h6 ms-4">
+                            3.3 Guardian's Given Name(Given Name means First name followed by Middle name (If any))(Initials
+                            not allowed)
+                        </label>
+
+                        <div class="row mx-3 my-3">
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="guardian_name" class="form-label">Guardian Name</label>
+                                    <input type="text" class="form-control capital" id="guardian_name" asp-for="Pass3.guardian_name" placeholder="Guardian name">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="guardian_middle_name" class="form-label">Guardian Middle Name</label>
+                                    <input type="text" class="form-control capital" id="guardian_middle_name" asp-for="Pass3.guardian_middle_name" placeholder="Guardian middle name (If any)">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="guardian_surname" class="form-label">Guardian Surname</label>
+                                    <input type="text" class="form-control capital" id="guardian_surname" asp-for="Pass3.guardian_surname" placeholder="Guardian surname">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3.4 -->
+                        <label for="spouse" class="form-label h6 ms-4">
+                            3.4 Spouse's Given Name(Given Name means First name followed by Middle name (If any))(Initials
+                            not allowed)
+                        </label>
+                        <div class="row mx-3 my-3">
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="spouse_name" class="form-label">Spouse Name</label>
+                                    <input type="text" class="form-control capital" id="spouse_name" asp-for="Pass3.spouse_name" placeholder="Spouse name">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="spouse_middle_name" class="form-label">Spouse Middle Name</label>
+                                    <input type="text" class="form-control capital" id="spouse_middle_name" asp-for="Pass3.spouse_middle_name" placeholder="Spouse middle name (If any)">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="spouse_surname" class="form-label">Spouse Surname</label>
+                                    <input type="text" class="form-control capital" id="spouse_surname" asp-for="Pass3.spouse_surname" placeholder="Spouse surname">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3.5 -->
+                        <label for="minor" class="form-label h6 ms-4">
+                            3.5 If applicant is minor provide following details
+                        </label><br>
+                        <label class="ms-4">
+                            Parent's Passport Details (If passport has been applied for but not received,
+                            give File Number)
+                        </label>
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-5  col-12">
+                                <label for="non_ecr" class="form-label h6 mx-2">
+                                    Given Input is Passport or File Number?
+                                </label>
+                            </div>
+                            <div class="col-lg-7  col-12">
+                                <input class="form-check-input" type="radio" asp-for="Pass3.pass_file" id="pass_file" value="1">
+                                <label class="form-check-label" for="pass_file">
+                                    Passport Number
+                                </label>
+                                <input class="form-check-input" type="radio" asp-for="Pass3.pass_file" id="pass_file" value="2">
+                                <label class="form-check-label" for="pass_file">
+                                    File Number
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Father passport details  -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-md-6">
+                                <label for="father_passport_no" class="form-label h6 mx-2">
+                                    Father/ Legal Guardian's File/
+                                    Passport Number
+                                </label>
+                                <input type="text" class="form-control mb-2" asp-for="Pass3.father_passport_no" id="father_passport_no" placeholder="Enter Father/Legal Guardian's File/Passport Number">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="father_nationality" class="form-label h6 mx-2">
+                                    Father/ Legal Guardian's
+                                    Nationality, if not Indian
+                                </label>
+                                <input type="text" class="form-control mb-2" id="father_nationality" asp-for="Pass3.father_nationality" placeholder="Enter Father/Legal Guardian's Nationality">
+                            </div>
+                        </div>
+
+                        <!-- Mother passport details  -->
+                        <div class="row mx-2 my-1">
+                            <div class="col-md-6">
+                                <label for="mother_passport_no" class="form-label h6 mx-2">
+                                    Mother/ Legal Guardian's File/
+                                    Passport Number
+                                </label>
+                                <input type="text" class="form-control mb-3" asp-for="Pass3.mother_passport_no" id="mother_passport_no" placeholder="Enter Mother/Legal Guardian's File/Passport Number">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="mother_nationality" class="form-label h6 mx-2">
+                                    Mother/ Legal Guardian's
+                                    Nationality, if not Indian
+                                </label>
+                                <input type="text" class="form-control mb-3" id="mother_nationality" asp-for="Pass3.mother_nationality" placeholder="Enter Mother/Legal Guardian's Nationality">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- section 4 -->
+                <div class="card my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">
+                            4. Present Residential Address Details (Where applicant presently resides)
+                        </h5>
+
+                        <!-- 4.1 -->
+                        <label for="address" class="form-label h6 mx-3"> 4.1 Present Address </label>
+                        <div class="row mx-3">
+                            <!-- house no & street  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="street" class="form-label">House No. & Street Name</label>
+                                    <input type="text" class="form-control capital" asp-for="Pass4.street" id="street" placeholder="Enter House no. & street name">
+                                </div>
+                            </div>
+
+                            <!-- village or town  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="town" class="form-label">Village or Town or City</label>
+                                    <input type="text" class="form-control capital" asp-for="Pass4.town" id="town" placeholder="Enter village/town/city name">
+                                </div>
+                            </div>
+
+                            <!-- district  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="district" class="form-label">District</label>
+                                    <input type="text" class="form-control capital" asp-for="Pass4.district" id="district" placeholder="Enter District name">
+                                </div>
+                            </div>
+                            <!-- Police Station  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="police_station" class="form-label">Police Station</label>
+                                    <input type="text" class="form-control capital" asp-for="Pass4.police_station" id="police_station" placeholder="Enter Police Station">
+                                </div>
+                            </div>
+
+                            <!-- State/UT  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="state" class="form-label">State/UT</label>
+                                    <input type="text" class="form-control capital" asp-for="Pass4.state" id="state" placeholder="Enter State/UT">
+                                </div>
+                            </div>
+
+                            <!-- PIN  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="pin" class="form-label">PIN</label>
+                                    <input type="number" class="form-control capital" asp-for="Pass4.pin" id="pin" placeholder="Enter PIN">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mx-3">
+                            <!-- Mobile Number  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="mobile_no" class="form-label">Mobile Number</label>
+                                    <input type="number" class="form-control" asp-for="Pass4.mobile_no" id="mobile_no" placeholder="Enter your Mobile number">
+                                </div>
+                            </div>
+
+                            <!-- Telephone Number  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="telephone number" class="form-label">Telephone Number</label>
+                                    <input type="number" class="form-control" asp-for="Pass4.telephone_number" id="telephone number" placeholder="Enter your Telephone number">
+                                </div>
+                            </div>
+
+                            <!-- Email ID  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email ID</label>
+                                    <input type="text" class="form-control" asp-for="Pass4.email" id="email" placeholder="Enter your Email-ID">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4.2 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-6 col-md-8 col-sm-12 col-12 p-1">
+                                <label for="same_add" class="form-label h6 mx-2">
+                                    4.2 Is permanent address same as present
+                                    address?
+                                </label>
+                            </div>
+                            <div class="col-lg-5 col-md-4 col-sm-12 col-12 ms-2">
+                                <input class="form-check-input" type="radio" asp-for="Pass4.same_add" id="same_add1" value="1" onclick="address()">
+                                <label class="form-check-label" for="same_add1">
+                                    Yes
+                                </label>
+                                <input class="form-check-input" type="radio" asp-for="Pass4.same_add" id="same_add2" value="2" onclick="address()">
+                                <label class="form-check-label" for="same_add2">
+                                    No
+                                </label> &nbsp; <small>(If no provide below details)</small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- section 5 -->
+                <div class="card my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">5. Emergency Contact Details</h5>
+                        <div class="form-group mx-2">
+                            <label for="emergency" class="form-check-label h6 mx-3 mb-1">
+                                Name and address (Mention address
+                                only if different from present residential address)
+                            </label>
+
+                            <div class="row">
+                                <div class="col-lg-8 col-md-10">
+                                    <input type="text" class="form-control capital mx-3 mb-2" asp-for="Pass5.em_name" id="em_name" placeholder="Enter Emergency contact person name" >
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-8 col-md-10">
+                                    <textarea class="form-control mx-3" id="em_address" asp-for="Pass5.em_address" placeholder="Enter Emergency contact person address" rows="3" ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mx-2 my-2">
+                            <label for="emergency" class="form-check-label h6 mx-3 mb-1">Email ID</label>
+                            <div class="row">
+                                <div class="col-lg-8 col-md-10">
+                                    <input type="text" class="form-control mx-3 mb-2" asp-for="Pass5.em_email" id="em_email" placeholder="Enter Emergency contact person email id" >
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- section 6 -->
+                <div class="card my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">6. Previous Passport/ Application Detail</h5>
+                        <div class="form-group mx-2">
+                            <label for="certi" class="form-check-label h6 mx-3 mb-1">
+                                6.1 Details of latest held/ existing/
+                                lost/ damaged Ordinary Passport/Identity Certificate
+                            </label>
+                            <div class="row my-2 mx-3">
+                                <!-- Passport/Identity certificate Number  -->
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <div class="mb-3">
+                                        <label for="certi_no" class="form-label">Passport/Identity certificate No </label>
+                                        <input type="text" class="form-control" asp-for="Pass6.certi_no" id="certi_no" placeholder="Enter Passport/Identity Number" >
+                                    </div>
+                                </div>
+
+                                <!-- Date of Issue(DD-MM-YYYY)  -->
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <div class="mb-3">
+                                        <label for="issue_date" class="form-label">Date of Issue(DD-MM-YYYY)</label>
+                                        <input type="date" asp-for="Pass6.issue_date" id="issue_date" class="form-control" >
+                                    </div>
+                                </div>
+
+                                <!-- Date of Expiry (DD-MM-YYYY) -->
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <div class="mb-3">
+                                        <label for="expiry_date" class="form-label">Date of Expiry (DD-MM-YYYY)</label>
+                                        <input type="date" asp-for="Pass6.expiry_date" id="expiry_date" class="form-control" >
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- place  -->
+                            <div class="my-2 mx-2">
+                                <label for="issue_place" class="form-label mx-3"> Place of Issue</label>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-8"><input type="text" class="form-control capital mx-3" asp-for="Pass6.issue_place" id="issue_place" placeholder="Enter a place of issue" ></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 6.2 -->
+                        <div class="row mx-2 my-3">
+                            <div class="col-lg-6 col-12">
+                                <label for="not_issued_pass" class="form-label h6">
+                                    6.2 Have you ever applied for passport, but
+                                    not issued?
+                                </label>
+                            </div>
+                            <div class="col-lg-6 col-12 ">
+                                <input class="form-check-input ms-2" type="radio" asp-for="Pass6.not_issued_pass" id="not_issued_pass1" value="1" onclick="notIssued()" disabled>
+                                <label class="form-check-label" for="not_issued_pass1">
+                                    Yes
+                                </label>
+                                <input class="form-check-input" type="radio" asp-for="Pass6.not_issued_pass" value="2" id="not_issued_pass2" onclick="notIssued()" disabled>
+                                <label class="form-check-label" for="not_issued_pass2">
+                                    No
+                                </label> &nbsp; <small>(If yes, provide the following details)</small>
+                            </div>
+                        </div>
+                        <div class="row mx-3">
+                            <!-- File Number  -->
+                            <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="file_no" class="form-label">File Number</label>
+                                    <input type="text" class="form-control" asp-for="Pass6.file_no" id="file_no" placeholder="Enter File Number" disabled>
+                                </div>
+                            </div>
+
+                            <!-- Month and Year of Applying  -->
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="month" class="form-label">Month and Year of Applying</label>
+                                    <input class="form-control" type="month" asp-for="Pass6.month_year" id="month_year" disabled>
+                                </div>
+                            </div>
+
+                            <!--  Name of Passport office where applied  -->
+                            <div class="col-lg-5 col-md-7 col-sm-12 col-12">
+                                <div class="mb-3">
+                                    <label for="pass_office" class="form-label">
+                                        Name of Passport office where
+                                        applied
+                                    </label>
+                                    <input type="text" class="form-control capital" asp-for="Pass6.pass_office" id="pass_office" placeholder="Enter Passport office Name" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- section 7 -->
+                <div class="card my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">7. Other Details</h5>
+                        <div class="form-group mx-2">
+                            <!-- 7.1 -->
+                            <label for="certi" class="form-check-label h6 mx-3 mb-1">
+                                7.1 Provide the following details if
+                                there are any criminal proceeding pendings against the applicant.
+                            </label>
+
+                            <!-- 7.1.1 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.1.1</span> &nbsp; Are any proceedings in respect of an offence alleged to have been committed by you pending before a criminal court in India? <br> If yes, fill Column 6.1 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od1" value="1" id="od1">
+                                    <label class="form-check-label" for="od1">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od1" value="2" id="od1">
+                                    <label class="form-check-label" for="od1">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.1.2 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.1.2</span> &nbsp; Has any warrant or summons for your appearance been issued & pending before a court under any law for the time being in force?<br>If yes, fill Column 6.2 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od2" value="1" id="od2">
+                                    <label class="form-check-label" for="od2">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio"asp-for="Pass7.od2" value="2" id="od2">
+                                    <label class="form-check-label" for="od2">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.1.3 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.1.3</span> &nbsp; Has a warrant for your arrest been issued by a court under any law for the time being in force?<br>If yes, fill Column 6.3 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od3" value="1" id="od3">
+                                    <label class="form-check-label" for="od3">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od3" value="2" id="od3">
+                                    <label class="form-check-label" for="od3">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.1.4 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.1.4</span> &nbsp; Has an order prohibiting your depature from india been made by any court?<br>If yes, fill Column 6.4 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od4" value="1" id="od4">
+                                    <label class="form-check-label" for="od4">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od4" value="2" id="od4">
+                                    <label class="form-check-label" for="od4">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.2 -->
+                            <label for="certi" class="form-check-label h6 mx-3 mt-3 mb-1">
+                                7.2 Provide the following details if applicant has been convicted bt a court in India.
+                            </label>
+
+                            <!-- 7.2.1 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9">
+                                    <span class="h6">7.2.1</span> &nbsp; Have you, at any time during the period of five years immediately preceding the date of this application, been convicted by a court in India for any offence involving moral turpitude and
+                                    sentenced in respect thereof to imprisonment for not less than two years?<br>If yes, fill Column 6.5 of Supplementary Form
+                                </div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio"asp-for="Pass7.od5" value="1" id="od5">
+                                    <label class="form-check-label" for="od5">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od5" value="2" id="od5">
+                                    <label class="form-check-label" for="od5">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.3 -->
+                            <label for="certi" class="form-check-label h6 mx-3 mt-3 mb-1">
+                                7.3 Provide the following details if applicant has been refused/denied passport.
+                            </label>
+
+                            <!-- 7.3.1 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.3.1</span> &nbsp; Have you ever been refused/denied passport?<br>If yes, fill Column 6.6 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od6" value="1" id="od6">
+                                    <label class="form-check-label" for="od6">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od6" value="2" id="od6">
+                                    <label class="form-check-label" for="od6">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.3.2 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.3.2</span> &nbsp; Has your passport ever been impounded?<br>If yes, fill Column 6.7 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od7" value="1" id="od7">
+                                    <label class="form-check-label" for="od7">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od7" value="2" id="od7">
+                                    <label class="form-check-label" for="od7">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.3.3 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.3.3</span> &nbsp; Has your passport ever been revoked?<br>If yes, fill Column 6.8 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio"asp-for="Pass7.od8" value="1" id="od8">
+                                    <label class="form-check-label" for="od8">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od8" value="2" id="od8">
+                                    <label class="form-check-label" for="od8">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.4 -->
+                            <label for="certi" class="form-check-label h6 mx-3 mt-3 mb-1">
+                                7.4 Provide the following details if applicant has applied for or been granted foreign citizenship.
+                            </label>
+
+                            <!-- 7.4.1 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.4.1</span> &nbsp; Have you ever been granted citizenship by any other region/country?<br>If yes, fill Column 6.9 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od9" value="1" id="od9">
+                                    <label class="form-check-label" for="od9">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od9" value="2" id="od9">
+                                    <label class="form-check-label" for="od9">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.4.2 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.4.2</span> &nbsp; Have you ever held the passport of any other region/country at any time?<br>If yes, fill Column 6.10 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od10" value="1" id="od10">
+                                    <label class="form-check-label" for="od10">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od10" value="2" id="od10">
+                                    <label class="form-check-label" for="od10">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.4.3 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.4.3</span> &nbsp; Have you ever surrendered your Indian passport?<br>If yes, fill Column 6.11 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od11" value="1" id="od11">
+                                    <label class="form-check-label" for="od11">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od11" value="2" id="od11">
+                                    <label class="form-check-label" for="od11">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.4.4 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.4.4</span> &nbsp; Have you ever applied for renunciation of Indian citizenship?<br>If yes, fill Column 6.12 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od12" value="1" id="od12">
+                                    <label class="form-check-label" for="od12">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od12" value="2" id="od12">
+                                    <label class="form-check-label" for="od12">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.5 -->
+                            <label for="certi" class="form-check-label h6 mx-3 mt-3 mb-1">
+                                7.5 Provide the following details if applicant has returned to India on Emergency Certificate.
+                            </label>
+
+                            <!-- 7.5.1 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.5.1</span> &nbsp; Have you ever returned to india on Emergency Certificate(EC)?<br>If yes, fill Column 6.13 of Supplementary Form</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio"asp-for="Pass7.od13" value="1" id="od13">
+                                    <label class="form-check-label" for="od13">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od13" value="2" id="od13">
+                                    <label class="form-check-label" for="od13">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 7.5.2 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.5.2</span> &nbsp; Have you ever been deported from any country?<br>If yes, was the cost borne by the Government of India and if so, has the same been refunded?</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od14" value="1" id="od14" onclick="sub14()">
+                                    <label class="form-check-label" for="od14">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od14" value="2" id="od14" onclick="sub14()">
+                                    <label class="form-check-label" for="od14">
+                                        No
+                                    </label> <br>
+                                    <span class="subbtn" id="subbtn_14">
+                                        <input class="form-check-input" type="radio" asp-for="Pass7.od14_sub" value="1" id="od14_sub">
+                                        <label class="form-check-label" for="od14_sub">
+                                            Yes
+                                        </label> &nbsp;
+                                        <input class="form-check-input" type="radio" asp-for="Pass7.od14_sub" value="2" id="od14_sub">
+                                        <label class="form-check-label" for="od14_sub">
+                                            No
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- 7.5.3 -->
+                            <div class="row my-2 mx-3">
+                                <div class="col-lg-9 col-md-9"><span class="h6">7.5.3</span> &nbsp;Have you ever repatriated from any country back to india?<br>If yes, was the cost borne by the Government of India and if so, has the same been refunded?</div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od15" value="1" id="od15" onclick="sub15()">
+                                    <label class="form-check-label" for="od15">
+                                        Yes
+                                    </label> &nbsp;
+                                    <input class="form-check-input" type="radio" asp-for="Pass7.od15" value="2" id="od15" onclick="sub15()">
+                                    <label class="form-check-label" for="od15">
+                                        No
+                                    </label> <br>
+                                    <span class="subbtn" id="subbtn_15">
+                                        <input class="form-check-input" type="radio" asp-for="Pass7.od15_sub" value="1" id="od15_sub">
+                                        <label class="form-check-label" for="od15_sub">
+                                            Yes
+                                        </label> &nbsp;
+                                        <input class="form-check-input" type="radio" asp-for="Pass7.od15_sub" value="2" id="od15_sub">
+                                        <label class="form-check-label" for="od15_sub">
+                                            No
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <!-- section 8 -->
+                <div class="card my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">8. Fee Details (Not to be filled by applicants submitting the application at Passport Seva Kendra)</h5>
+
+                        <!-- 8.1 -->
+                        <div class="my-2 mx-2">
+                            <div class="row">
+                                <label for="fee" class="col-lg-3 col-md-4 form-label h6 mx-3"> 8.1 Fee amount in (Rs) </label>
+
+                                <div class="col-lg-4 col-md-7">
+                                    <input type="text" class="form-control mx-3" id="fee" asp-for="Pass8.fee" placeholder="Enter Fee Amount">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- 8.2 -->
+                        <div class="my-2 mx-2">
+                            <label for="fee" class="form-label h6 mx-3"> 8.2 If paid by Demand Draft (DD), provide the following details </label>
+                            <div class="row my-2 mx-3">
+                                <!-- DD Number  -->
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <label for="dd_num" class="form-label">DD Number</label>
+                                    <input type="number" class="form-control" id="dd_num" asp-for="Pass8.dd_num" placeholder="Enter DD Number">
+                                </div>
+
+                                <!-- DD Issue Date  -->
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <label for="dd_issue_date" class="form-label">DD Issue Date</label>
+                                    <input type="date" id="dd_issue_date" asp-for="Pass8.dd_issue_date" class="form-control">
+
+                                </div>
+
+                                <!-- DD Expiry Date -->
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                    <label for="dd_exp_date" class="form-label">DD Expiry Date</label>
+                                    <input type="date" id="dd_exp_date" asp-for="Pass8.dd_exp_date" class="form-control">
+
+                                </div>
+                            </div>
+
+                            <!-- Bank & Branch  -->
+                            <div class="row mx-3 my-3">
+                                <!-- Bank -->
+                                <div class="col-md-6">
+                                    <label for="bank_name" class="form-label"> Bank Name </label>
+                                    <input type="text" class="form-control " placeholder="Enter Bank Name" asp-for="Pass8.bank_name" id="bank_name">
+                                </div>
+
+                                <!-- branch -->
+                                <div class="col-md-6 pe-5">
+                                    <label for="branch" class="form-label">  Branch </label>
+                                    <input type="text" class="form-control " placeholder="Enter Branch Name" asp-for="Pass8.branch" id="branch">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- section 9 -->
+                <div class="card my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">9. Enclosures</h5>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                                <label for="en_file" class="form-label h6 mx-2">Choose the Multiple Enclosures:</label>
+                            </div>
+                             <div class="col-lg-4 col-md-5">
+                                <input class="form-control" type="file" asp-for="Pass9.en_file" id="en_file" multiple>
+                            </div>
+                           
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <!-- section 10 -->
+                <div class="card my-3 mx-3">
+                    <div class="card-body">
+                        <h5 class="card-title p-2 mb-3">10. Self Declaration</h5>
+                        <div class="my-2 mx-3" style="text-align:justify;">
+                            I owe allegiance to the sovereignty, unity & integrity of India, and have not voluntarily acquired citizenship or travel document of any other country. I have not lost, surrendered or been deprived of the citizenship of India. I have not contravened any
+                            of the conditions relating to the possession and use of an Indian passport. <br><br> I affirm that the information and particulars given by me in this form are true and correct. I further state that I am
+                            not suppressing any material information in this regard. I further affirm that the enclosures and documentary proof submitted in support of my application for an Indian passport are authentic and solely pertain to me and I am fully
+                            responsible for the accuracy of the same. I am liable to be penalized or prosecuted if found otherwise. I am aware that under the Passports Act, 1967 it is a criminal offence to furnish any false information or to suppress any
+                            material information with a view to obtaining passport or travel document. <br><br> I have read and understood the contents of the above and by submitting this form certify that all the information submitted by me in the form is
+                            bonafide.
+                        </div>
+                        <div class="row my-2 mx-3">
+                            <!-- DD Number  -->
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                <label for="sd_place" class="form-label">Place</label>
+                                <input class="form-control capital" type="text" asp-for="Pass9.sd_place" id="sd_place" placeholder="Enter Place Name">
+                            </div>
+
+                            <!-- DD Issue Date  -->
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                <label for="sd_date" class="form-label">Date(DD-MM-YYYY)</label>
+                                <input type="text" asp-for="Pass9.sd_date" id="sd_date" class="form-control" disabled>
+
+                            </div>
+
+                            <!-- sd sign -->
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                <label for="dd_exp_date" class="form-label">Select your Sign</label>
+                                <input type="file" name="uploadSdSign" id="uploadSdSign" accept="image/*" class="">
+                                 <img src="/images/@Model.Pass9.sd_sign" width="50" height="50" asp-append-version="true"/>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+                <div class="error m-4" id="error">
+                </div>
+                <div id="down" class="ms-4">
+                    <!-- <input type="submit" name="submit" class="bt btn-primary"> -->
+                    <button type="submit" class="btn btn-primary btn-lg mx-3 my-1">Submit</button>
+                    <button type="reset" name="reset" class="btn btn-secondary btn-lg mx-3 my-1" onclick="location.reload()">Reset</button>
+                    <!-- <input type="reset" name="reset" class="btn btn-secondary" onclick="location.reload()"> -->
+                </div>
+                @*</form>*@
+            </form>
+            
+        </div>
+    </div>
+  @*@Scripts.Render("~/bundles/jquery")*@
+      <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+   @* <script src="~/js/PassportScript.js"></script>*@
+</body>
+</html>
+
+
+
+
